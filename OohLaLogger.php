@@ -9,8 +9,8 @@
 
 To configure please setup as shown below.  Adding the API Key to your params
 array is somewhat optional as you can simply replace the key in 2 places at
-the beginning of the class.  I set it up this way because I utilized @author kshamoun
-boilerplate similiar to http://yiinitializr.2amigos.us/
+the beginning of the class.  I set it up this way because I utilized 
+boilerplate similar to http://yiinitializr.2amigos.us/
 
 
 Setup in main.php config file:
