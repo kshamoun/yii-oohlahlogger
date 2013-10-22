@@ -26,4 +26,4 @@ Setup in main.php config file:
 
 Setup in your params array:
 If you set the key to FALSE then it won't log (good for dev/test environments so they don't fill your logs)
-'oohLaLogApiKey' => 'YOUR_API_KEY_HERE',
+	'oohLaLogApiKey' => 'YOUR_API_KEY_HERE',
