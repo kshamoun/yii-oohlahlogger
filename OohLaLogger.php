@@ -7,11 +7,7 @@
  *
  * @copyright Copyright &copy; 2008-2011 Operation Solutions LLC
 
-To configure please setup as shown below.  Adding the API Key to your params
-array is somewhat optional as you can simply replace the key in 2 places at
-the beginning of the class.  I set it up this way because I utilized 
-boilerplate similar to http://yiinitializr.2amigos.us/
-
+To configure please setup main.php config file:
 
 Setup in main.php config file:
 
@@ -23,32 +19,30 @@ Setup in main.php config file:
 							'class'=>'common.extensions.OohLaLogger',
 							// for levels see: http://www.yiiframework.com/doc/guide/1.1/en/topics.logging
 							'levels'=>'info,error,warning',
+							// if you have YII_DEBUG set to true and this set to true it will skip logging
+							'skip_if_yiidebug_on' => true,
+							// Put your api key here
+							'oohLaLogApiKey' => 'YOUR_API_KEY_HERE'
 					),
 			)
 	),
 
-
-Setup in your params array:
-If you set the key to FALSE then it won't log (good for dev/test environments so they don't fill your logs)
-'oohLaLogApiKey' => 'YOUR_API_KEY_HERE',
-
  */
 class OohLaLogger extends CLogRoute
 {
+	public $skip_if_yiidebug_on = true;
+	public $oohLaLogApiKey = false;
+
 	protected function processLogs($logs)
 	{
-		if ((!isset(Yii::app()->params['oohLaLogApiKey'])))
-			throw new CException("Your api key is NOT set for oohLaLog. Make sure the variable 'oohLaLogApiKey' is set in your params in the config.");
-
-		$key = Yii::app()->params['oohLaLogApiKey'];
-		// if set to false then don't log
-		if ($key === FALSE)
+		if(YII_DEBUG AND $this->skip_if_yiidebug_on === true);
 			return;
 
-		$ollHost = 'api.oohlalog.com';
-		$ollPath = '/api/logging/save.json';
-		$ollPort = '80';
-		$url = 'http://' . $ollHost . ':' . $ollPort . $ollPath . '?apiKey=' . $key;
+		// if set to false then don't log
+		if ($this->oohLaLogApiKey === FALSE)
+			return;
+
+		$url = 'http://api.oohlalog.com:80/api/logging/save.json?apiKey='.$this->oohLaLogApiKey;
 
 		$text=array();
 		foreach($logs as $log){
