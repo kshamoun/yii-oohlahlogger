@@ -35,7 +35,7 @@ class OohLaLogger extends CLogRoute
 
 	protected function processLogs($logs)
 	{
-		if(YII_DEBUG AND $this->skip_if_yiidebug_on === true);
+		if(YII_DEBUG AND $this->skip_if_yiidebug_on === true)
 			return;
 
 		// if set to false then don't log
