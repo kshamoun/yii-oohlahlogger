@@ -43,11 +43,21 @@ class OohLaLogger extends CLogRoute
 			return;
 
 		$url = 'http://api.oohlalog.com:80/api/logging/save.json?apiKey='.$this->oohLaLogApiKey;
-
+		
+		//adding ip address to error logs
+                if(isset($_SERVER['REMOTE_ADDR']))
+                {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                }
+                elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+                {
+                    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                }
+                
 		$text=array();
 		foreach($logs as $log){
 			$m = explode ( 'Stack trace:', $log[0] ,2 );
-			$text = array('level'=> $log[1], 'category' => $log[2], 'timestamp'=> floor(microtime(true)*1000), 'hostName'=> gethostname(),'message'=> addcslashes($m[0],"'") ,'details'=> ( isset($m[1])? $m[1]: ''));
+			$text = array('level'=> $log[1], 'category' => $log[2], 'timestamp'=> floor(microtime(true)*1000), 'hostName'=> gethostname(),'message'=> addcslashes($m[0],"'") ,'details'=> ( isset($m[1])? $m[1].'IP Address: '.$ip: ''));
 			$payload = json_encode(array('logs' => array($text)),JSON_HEX_APOS );
 			$cmd = "curl -X POST -H 'Content-Type: application/json' -d '".$payload."' "."'".$url."' > /dev/null 2>&1 &";
 			exec($cmd, $output, $exit);
